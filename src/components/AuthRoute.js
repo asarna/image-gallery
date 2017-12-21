@@ -10,7 +10,7 @@ export default class AuthRoute extends Component {
       <Route
         { ...restProps }
         render={(props) => this.props.authenticated === true
-            ? <this.props.component { ...restProps }/>
+            ? this.props.render()
             : <p>You must log in to see this.</p>
         } 
       />

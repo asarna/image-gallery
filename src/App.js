@@ -1,27 +1,11 @@
 import React, { Component } from 'react';
 import fire, { auth, provider } from './fire';
-import authContent from './authContent';
+import AuthContent from './components/AuthContent';
+import AuthRoute from './components/AuthRoute';
 import {
   BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect
 } from 'react-router-dom';
-
-class AuthenticatedRoute extends Component {
-  render() {
-    const { authenticated, component, ...restProps } = this.props;
-    return (
-      <Route
-        { ...restProps }
-        render={(props) => authenticated === true
-            ? <this.props.component/>
-            : <Redirect to='/login' />
-        } 
-      />
-    )
-  }
-}
+import { Menu } from 'semantic-ui-react';
 
 class App extends Component {
   constructor(props) {
@@ -84,30 +68,30 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Menu inverted>
+          <Menu.Menu position='right'>
+          {this.state.user ?
+            <Menu.Item onClick={this.logout}>Log Out</Menu.Item>                
+            :
+            <Menu.Item onClick={this.login}>Log In</Menu.Item>              
+          }
+          </Menu.Menu>
+        </Menu>
         <div className="wrapper">
           <h1>An app</h1>
-          {this.state.user ?
-            <button onClick={this.logout}>Log Out</button>                
-            :
-            <button onClick={this.login}>Log In</button>              
-          }
+          
         </div>
         <Router>
           <div>
-            <AuthenticatedRoute
+            <AuthRoute
               exact
               path="/secret"
               authenticated={!!this.state.user}
-              component={authContent}
-            />
-            <Route
-              exact
-              path="/login"
-              render={() => <button onClick={this.login}>Log In</button>}
+              component={AuthContent}
             />
           </div>
         </Router>
-        { this.state.user ? 
+        { this.state.user && 
           <div>
             <p>You're logged in!</p>
             <form onSubmit={this.addMessage.bind(this)}>
@@ -121,7 +105,6 @@ class App extends Component {
               </ul>
             </form>
           </div>
-          : <p>Ya ain't logged in</p>
         }
         
       </div>

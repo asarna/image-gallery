@@ -1,5 +1,27 @@
 import React, { Component } from 'react';
 import fire, { auth, provider } from './fire';
+import authContent from './authContent';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from 'react-router-dom';
+
+class AuthenticatedRoute extends Component {
+  render() {
+    const { authenticated, component, ...restProps } = this.props;
+    return (
+      <Route
+        { ...restProps }
+        render={(props) => authenticated === true
+            ? <this.props.component/>
+            : <Redirect to='/login' />
+        } 
+      />
+    )
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -70,6 +92,21 @@ class App extends Component {
             <button onClick={this.login}>Log In</button>              
           }
         </div>
+        <Router>
+          <div>
+            <AuthenticatedRoute
+              exact
+              path="/secret"
+              authenticated={!!this.state.user}
+              component={authContent}
+            />
+            <Route
+              exact
+              path="/login"
+              render={() => <button onClick={this.login}>Log In</button>}
+            />
+          </div>
+        </Router>
         { this.state.user ? 
           <div>
             <p>You're logged in!</p>

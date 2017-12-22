@@ -5,7 +5,7 @@ import AuthRoute from './components/AuthRoute';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Icon, Label, Grid } from 'semantic-ui-react';
 
 class App extends Component {
   constructor(props) {
@@ -59,22 +59,38 @@ class App extends Component {
           }
           </Menu.Menu>
         </Menu>
-        <div className="wrapper">
-          <h1>An app</h1>
-          
-        </div>
-        <Router>
-          <div>
-            <AuthRoute
-              exact
-              path="/secret"
-              authenticated={!!this.state.user}
-              render={() => <AuthContent
-                user={ this.state.user }
-              />}
-            />
-          </div>
-        </Router>
+        <Grid>
+          <Grid.Column width={4}>
+            <Menu vertical>
+              <Menu.Item name='inbox' onClick={this.handleItemClick}>
+                <Label color='teal'>1</Label>
+                Inbox
+              </Menu.Item>
+              <Menu.Item name='spam' onClick={this.handleItemClick}>
+                <Label>51</Label>
+                Spam
+              </Menu.Item>
+              <Menu.Item name='updates' onClick={this.handleItemClick}>
+                <Label>1</Label>
+                Updates
+              </Menu.Item>
+            </Menu>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <Router>
+              <div>
+                <AuthRoute
+                  exact
+                  path="/secret"
+                  authenticated={!!this.state.user}
+                  render={() => <AuthContent
+                    user={ this.state.user }
+                  />}
+                />
+              </div>
+            </Router>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

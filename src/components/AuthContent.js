@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import fire from './../fire.js';
 import { Card, Image, Icon } from 'semantic-ui-react';
+import Dropzone from 'react-dropzone';
 
 export default class authContent extends Component {
   constructor(props) {

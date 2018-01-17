@@ -10,6 +10,8 @@ export default class Uploader extends React.Component {
       imgFile: {}
     }
 
+    this.itemsPath = `${this.props.user.uid}/items`;
+
     this.addItem = this.addItem.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -19,24 +21,25 @@ export default class Uploader extends React.Component {
     e.preventDefault();
 
     const storageRef = storage.ref();
-    const newKey = fire.database().ref(`${this.props.user.uid}/items`).push().key; // generate unique key
+    const newKey = fire.database().ref(this.itemsPath).push().key; // generate unique key
 
     this.uploadImage(this.state.imgFile, newKey).then(() => {   // upload image
       storageRef.child(`${this.props.user.uid}/${newKey}.jpg`).getDownloadURL().then((url) => { // get image url
         this.addItem(url);  // add to db
       });
-    });    
+    }); 
+
+    this.setState({
+      imgFile: {}
+    });   
   }
 
   addItem(imgUrl){
-    fire.database().ref(`${this.props.user.uid}/items`).push({  // Send the message to Firebase
+    fire.database().ref(this.itemsPath).push({  // Send the message to Firebase
       name: this.nameEl.value,
       imgUrl: imgUrl
     });
     this.nameEl.value = '';
-    this.setState({
-      imgFile: {}
-    })
   }
 
   onDrop(files) {
@@ -63,10 +66,12 @@ export default class Uploader extends React.Component {
         multiple={false}
         onDrop={this.onDrop}
       />
-      <img 
-        src={this.state.imgFile.preview && this.state.imgFile.preview} 
-        alt='preview'
-      />
+      {this.state.imgFile.preview && 
+        <img 
+          src={this.state.imgFile.preview} 
+          alt='preview'
+        />
+      }
       <input type="submit"/>
     </form>
   }

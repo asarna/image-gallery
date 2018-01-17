@@ -9,29 +9,34 @@ export default class Uploader extends React.Component {
     this.state = {
       imgFile: {}
     }
+
+    this.addItem = this.addItem.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  addItem(e){
+  onSubmit(e) {
     e.preventDefault();
 
-    let imgUrl;
+    const storageRef = storage.ref();
+    const newKey = fire.database().ref(`${this.props.user.uid}/items`).push().key; // generate unique key
 
-    this.uploadImage(this.state.imgFile).then(() => {
-      const storageRef = storage.ref();
-        storageRef.child(`${this.props.user.uid}/image.jpg`).getDownloadURL().then((url) => {
-          imgUrl = url;
+    this.uploadImage(this.state.imgFile, newKey).then(() => {   // upload image
+      storageRef.child(`${this.props.user.uid}/${newKey}.jpg`).getDownloadURL().then((url) => { // get image url
+        this.addItem(url);  // add to db
+      });
+    });    
+  }
 
-          /* Send the message to Firebase */
-          fire.database().ref(`${this.props.user.uid}/items`).push({
-            name: this.nameEl.value,
-            imgUrl: imgUrl
-          });
-          this.nameEl.value = '';
-          this.setState({
-            imgFile: {}
-          })
-        });
-    });  
+  addItem(imgUrl){
+    fire.database().ref(`${this.props.user.uid}/items`).push({  // Send the message to Firebase
+      name: this.nameEl.value,
+      imgUrl: imgUrl
+    });
+    this.nameEl.value = '';
+    this.setState({
+      imgFile: {}
+    })
   }
 
   onDrop(files) {
@@ -42,9 +47,9 @@ export default class Uploader extends React.Component {
     });   
   }
 
-  uploadImage(file) {
+  uploadImage(file, filename) {
     const storageRef = storage.ref();
-    const imageRef = storageRef.child(`${this.props.user.uid}/image.jpg`);
+    const imageRef = storageRef.child(`${this.props.user.uid}/${filename}.jpg`);
 
     return imageRef.put(file).then((snapshot) => {
       console.log('Uploaded a blob or file!');
@@ -52,11 +57,11 @@ export default class Uploader extends React.Component {
   }
 
   render() {
-    return <form onSubmit={this.addItem.bind(this)}>
+    return <form onSubmit={this.onSubmit}>
       Name: <input type="text" ref={ el => this.nameEl = el }/>
       <Dropzone 
         multiple={false}
-        onDrop={this.onDrop.bind(this)}
+        onDrop={this.onDrop}
       />
       <img 
         src={this.state.imgFile.preview && this.state.imgFile.preview} 

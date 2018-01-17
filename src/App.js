@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import fire, { auth, provider } from './fire';
-import AuthContent from './components/AuthContent';
+import Items from './components/Items';
 import AuthRoute from './components/AuthRoute';
+import TopMenu from './components/TopMenu';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom';
@@ -16,8 +17,7 @@ class App extends Component {
       items: [],
       user: null
     }
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   componentDidMount() {
@@ -28,37 +28,19 @@ class App extends Component {
     });
   }
 
-  login() {
-    auth.signInWithPopup(provider) 
-      .then((result) => {
-        const user = result.user;
-        this.setState({
-          user
-        });
-      });
-  }
-
-  logout() {
-    auth.signOut()
-      .then(() => {
-        this.setState({
-          user: null
-        });
-      });
+  setUser(user) {
+    this.setState({
+      user: user
+    })
   }
 
   render() {
     return (
       <div>
-        <Menu inverted>
-          <Menu.Menu position='right'>
-          {this.state.user ?
-            <Menu.Item onClick={this.logout}>Log Out</Menu.Item>                
-            :
-            <Menu.Item onClick={this.login}>Log In</Menu.Item>              
-          }
-          </Menu.Menu>
-        </Menu>
+        <TopMenu
+          user={this.state.user}
+          setUser={this.setUser}
+        />
         <Grid>
           <Grid.Column width={4}>
             <Menu vertical>
@@ -83,7 +65,7 @@ class App extends Component {
                   exact
                   path="/secret"
                   authenticated={!!this.state.user}
-                  render={() => <AuthContent
+                  render={() => <Items
                     user={ this.state.user }
                   />}
                 />

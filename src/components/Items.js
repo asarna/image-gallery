@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import fire from './../fire.js';
+import fire, { auth, provider, storage } from './../fire.js';
 import { Card, Image, Icon } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 
-export default class authContent extends Component {
+export default class Items extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      items: [],
+      imgFile: {}
     }
   }
 
@@ -18,7 +19,7 @@ export default class authContent extends Component {
       /* Update React state when item is added at Firebase Database */
       let item = { 
         name: snapshot.val().name,
-        imgPath: snapshot.val().imgPath, 
+        imgUrl: snapshot.val().imgUrl, 
         id: snapshot.key 
       };
       this.setState({ items: [item].concat(this.state.items) });
@@ -27,22 +28,45 @@ export default class authContent extends Component {
 
   addItem(e){
     e.preventDefault();
-    /* Send the message to Firebase */
 
-    fire.database().ref(`${this.props.user.uid}/items`).push({
-      name: this.nameEl.value,
-      imgPath: this.imgEl.value
+    let imgUrl;
+
+    this.uploadImage(this.state.imgFile).then(() => {
+      const storageRef = storage.ref();
+        storageRef.child(`${this.props.user.uid}/image.jpg`).getDownloadURL().then((url) => {
+          imgUrl = url;
+
+          /* Send the message to Firebase */
+          fire.database().ref(`${this.props.user.uid}/items`).push({
+            name: this.nameEl.value,
+            imgUrl: imgUrl
+          });
+          this.nameEl.value = '';
+          this.setState({
+            imgFile: {}
+          })
+        });
     });
-    this.nameEl.value = '';
-    this.imgEl.value = '';
+
+    
+    
   }
 
   onDrop(files) {
-    console.log('got', files);
+    const file = files[0];
+
     this.setState({
-      imgToUpload: 'updatee!'
+      imgFile: file
+    });   
+  }
+
+  uploadImage(file) {
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(`${this.props.user.uid}/image.jpg`);
+
+    return imageRef.put(file).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
     });
-    console.log(files[0].preview);
   }
 
   render() {
@@ -54,7 +78,7 @@ export default class authContent extends Component {
               this.state.items.map( item => {
                 return (
                   <Card key={item.id}>
-                    <Image src={item.imgPath} />
+                    <Image src={item.imgUrl} />
                     <Card.Content>
                       <Card.Header>
                         {item.name}
@@ -65,14 +89,8 @@ export default class authContent extends Component {
                         </span>
                       </Card.Meta>
                       <Card.Description>
-                        Matthew is a musician living in Nashville.
+                        description
                       </Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                      <a>
-                        <Icon name='user' />
-                        22 Friends
-                      </a>
                     </Card.Content>
                   </Card>
                 )
@@ -81,11 +99,12 @@ export default class authContent extends Component {
             <Card>
               <form onSubmit={this.addItem.bind(this)}>
                 Name: <input type="text" ref={ el => this.nameEl = el }/>
-                Image path: <input type="text" ref={ el => this.imgEl = el }/>
                 <Dropzone 
-                  onDrop={this.onDrop}
-                  preview={this.state.imgToUpload}
+                  ref={ el => this.imgEl = el}
+                  multiple={false}
+                  onDrop={this.onDrop.bind(this)}
                 />
+                <img src={this.state.imgFile.preview && this.state.imgFile.preview} />
                 <input type="submit"/>
               </form>
             </Card>

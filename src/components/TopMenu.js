@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Menu } from 'semantic-ui-react';
-import fire, { auth, provider } from '../fire';
+import { auth, provider } from '../fire';
 
 export default class TopMenu extends React.Component {
 

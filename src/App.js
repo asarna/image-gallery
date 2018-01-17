@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import fire, { auth, provider } from './fire';
+import { auth } from './fire';
 import Items from './components/Items';
 import AuthRoute from './components/AuthRoute';
 import TopMenu from './components/TopMenu';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom';
-import { Menu, Icon, Label, Grid } from 'semantic-ui-react';
+import { Menu, Label, Grid } from 'semantic-ui-react';
 
 class App extends Component {
   constructor(props) {

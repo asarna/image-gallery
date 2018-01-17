@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import fire, { auth, provider, storage } from './../fire.js';
-import { Card, Image, Icon } from 'semantic-ui-react';
+import fire, { storage } from './../fire.js';
+import { Card } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
+import Item from './Item';
 
 export default class Items extends Component {
   constructor(props) {
@@ -46,10 +47,7 @@ export default class Items extends Component {
             imgFile: {}
           })
         });
-    });
-
-    
-    
+    });  
   }
 
   onDrop(files) {
@@ -77,22 +75,11 @@ export default class Items extends Component {
             {
               this.state.items.map( item => {
                 return (
-                  <Card key={item.id}>
-                    <Image src={item.imgUrl} />
-                    <Card.Content>
-                      <Card.Header>
-                        {item.name}
-                      </Card.Header>
-                      <Card.Meta>
-                        <span className='date'>
-                          Joined in 2015
-                        </span>
-                      </Card.Meta>
-                      <Card.Description>
-                        description
-                      </Card.Description>
-                    </Card.Content>
-                  </Card>
+                  <Item
+                    img={item.imgUrl}
+                    key={item.id}
+                    name={item.name}
+                  />
                 )
               })
             }
@@ -104,7 +91,10 @@ export default class Items extends Component {
                   multiple={false}
                   onDrop={this.onDrop.bind(this)}
                 />
-                <img src={this.state.imgFile.preview && this.state.imgFile.preview} />
+                <img 
+                  src={this.state.imgFile.preview && this.state.imgFile.preview} 
+                  alt='preview'
+                />
                 <input type="submit"/>
               </form>
             </Card>

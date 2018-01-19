@@ -1,13 +1,19 @@
 import React from 'react';
 import fire, { storage } from './../fire.js';
 import Dropzone from 'react-dropzone';
+import './Uploader.css';
+import { Form } from 'semantic-ui-react';
 
 export default class Uploader extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      imgFile: {}
+      imgFile: {},
+      form: {
+        name: '',
+        description: ''
+      }
     }
 
     this.itemsPath = `${this.props.user.uid}/items`;
@@ -15,6 +21,7 @@ export default class Uploader extends React.Component {
     this.addItem = this.addItem.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   onSubmit(e) {
@@ -35,11 +42,19 @@ export default class Uploader extends React.Component {
   }
 
   addItem(imgUrl){
+    const { form: { name, description } } = this.state;
+
     fire.database().ref(this.itemsPath).push({  // Send the message to Firebase
-      name: this.nameEl.value,
+      name: name,
+      description: description,
       imgUrl: imgUrl
     });
-    this.nameEl.value = '';
+    this.setState({
+      form: {
+        name: '',
+        description: ''
+      }
+    });
   }
 
   onDrop(files) {
@@ -59,20 +74,53 @@ export default class Uploader extends React.Component {
     });
   }
 
-  render() {
-    return <form onSubmit={this.onSubmit}>
-      Name: <input type="text" ref={ el => this.nameEl = el }/>
-      <Dropzone 
-        multiple={false}
-        onDrop={this.onDrop}
-      />
-      {this.state.imgFile.preview && 
-        <img 
-          src={this.state.imgFile.preview} 
-          alt='preview'
-        />
+  onChange(e) {
+    e.preventDefault();
+    this.setState({
+      form: {
+        ...this.state.form,
+        [e.target.name]: e.target.value
       }
+    });
+  }
+
+  render() {
+    const { form: { name, description } } = this.state;
+
+    return <Form 
+      onSubmit={this.onSubmit}
+      className='dropzoneWrapper'
+    >
+      <Form.Input 
+        label='Name'
+        name='name' 
+        type="text" 
+        onChange={this.onChange}
+        value={name}
+      />
+      <Form.Input 
+        label='Description'
+        name='description' 
+        type="text" 
+        onChange={this.onChange}
+        value={description}
+      />
+        <Dropzone 
+          multiple={false}
+          onDrop={this.onDrop}
+          className='dropzone'
+        >
+        {this.state.imgFile.preview ? 
+          <img 
+            src={this.state.imgFile.preview} 
+            alt='preview'
+            className='previewImg'
+          /> :
+          <p>Drop an image here.</p>
+        }
+        </Dropzone>
+
       <input type="submit"/>
-    </form>
+    </Form>
   }
 }

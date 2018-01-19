@@ -23,6 +23,7 @@ export default class Items extends Component {
       /* Update React state when item is added at Firebase Database */
       let item = { 
         name: snapshot.val().name,
+        description: snapshot.val().description,
         imgUrl: snapshot.val().imgUrl, 
         id: snapshot.key 
       };
@@ -42,11 +43,12 @@ export default class Items extends Component {
                     img={item.imgUrl}
                     key={item.id}
                     name={item.name}
+                    description={item.description}
                   />
                 )
               })
             }
-            <Card>
+            <Card className='uploaderCard'>
               <Uploader 
                 user={this.props.user}
               />

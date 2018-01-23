@@ -7,6 +7,7 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import { Menu, Label, Grid } from 'semantic-ui-react';
+import UserProvider from './components/UserProvider';
 
 class App extends Component {
   constructor(props) {
@@ -35,45 +36,47 @@ class App extends Component {
   }
 
   render() {
+    const { user } = this.state;
+
     return (
-      <div>
-        <TopMenu
-          user={this.state.user}
-          setUser={this.setUser}
-        />
-        <Grid>
-          <Grid.Column width={4}>
-            <Menu vertical>
-              <Menu.Item name='inbox' onClick={this.handleItemClick}>
-                <Label color='teal'>1</Label>
-                Inbox
-              </Menu.Item>
-              <Menu.Item name='spam' onClick={this.handleItemClick}>
-                <Label>51</Label>
-                Spam
-              </Menu.Item>
-              <Menu.Item name='updates' onClick={this.handleItemClick}>
-                <Label>1</Label>
-                Updates
-              </Menu.Item>
-            </Menu>
-          </Grid.Column>
-          <Grid.Column width={12}>
-            <Router>
-              <div>
-                <AuthRoute
-                  exact
-                  path="/secret"
-                  authenticated={!!this.state.user}
-                  render={() => <Items
-                    user={ this.state.user }
-                  />}
-                />
-              </div>
-            </Router>
-          </Grid.Column>
-        </Grid>
-      </div>
+      <UserProvider user={user}>
+        <div>
+          <TopMenu
+            user={user}
+            setUser={this.setUser}
+          />
+          <Grid>
+            <Grid.Column width={4}>
+              <Menu vertical>
+                <Menu.Item name='inbox' onClick={this.handleItemClick}>
+                  <Label color='teal'>1</Label>
+                  Inbox
+                </Menu.Item>
+                <Menu.Item name='spam' onClick={this.handleItemClick}>
+                  <Label>51</Label>
+                  Spam
+                </Menu.Item>
+                <Menu.Item name='updates' onClick={this.handleItemClick}>
+                  <Label>1</Label>
+                  Updates
+                </Menu.Item>
+              </Menu>
+            </Grid.Column>
+            <Grid.Column width={12}>
+              <Router>
+                <div>
+                  <AuthRoute
+                    exact
+                    path="/secret"
+                    authenticated={!!user}
+                    render={() => <Items/>}
+                  />
+                </div>
+              </Router>
+            </Grid.Column>
+          </Grid>
+        </div>
+      </UserProvider>
     );
   }
 }

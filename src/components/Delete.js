@@ -1,8 +1,9 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import fire from './../fire.js';
+import user from './UserHOC';
 
-export default class Delete extends React.Component {
+class Delete extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,3 +23,5 @@ export default class Delete extends React.Component {
     />;
   }
 }
+
+export default user(Delete);

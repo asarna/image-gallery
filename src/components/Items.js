@@ -3,8 +3,9 @@ import fire from './../fire.js';
 import { Card } from 'semantic-ui-react';
 import Item from './Item';
 import Uploader from './Uploader';
+import user from './UserHOC';
 
-export default class Items extends Component {
+class Items extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,3 +76,6 @@ export default class Items extends Component {
     );
   }
 }
+
+export default user(Items);
+

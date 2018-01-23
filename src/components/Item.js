@@ -15,7 +15,10 @@ export default class Item extends React.Component {
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Delete itemToDelete={this.props.id}/>
+        <Delete 
+          itemToDelete={this.props.id}
+          user={this.props.user}
+        />
       </Card.Content>
     </Card>
   }

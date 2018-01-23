@@ -1,44 +1,56 @@
 import React from 'react';
 import fire, { storage } from './../fire.js';
-import Dropzone from 'react-dropzone';
 import './Uploader.css';
-import { Form } from 'semantic-ui-react';
+import ItemForm from './ItemForm';
 
 export default class Uploader extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      imgFile: {},
       form: {
         name: '',
-        description: ''
+        description: '',
+        imgFile: ''
       }
     }
 
     this.itemsPath = `${this.props.user.uid}/items`;
 
-    this.addItem = this.addItem.bind(this);
-    this.onDrop = this.onDrop.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.setImgFile = this.setImgFile.bind(this);
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  setImgFile(image) {
+    this.setState({
+      form: {
+        ...this.state.form,
+        imgFile: image
+      }
+    });
+  }
 
+  handleChange(e) {
+    e.preventDefault();
+    this.setState({
+      form: {
+        ...this.state.form,
+        [e.target.name]: e.target.value
+      }
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
     const storageRef = storage.ref();
     const newKey = fire.database().ref(this.itemsPath).push().key; // generate unique key
 
-    this.uploadImage(this.state.imgFile, newKey).then(() => {   // upload image
+    this.uploadImage(this.state.form.imgFile, newKey).then(() => {   // upload image
       storageRef.child(`${this.props.user.uid}/${newKey}.jpg`).getDownloadURL().then((url) => { // get image url
         this.addItem(url);  // add to db
       });
-    }); 
-
-    this.setState({
-      imgFile: {}
-    });   
+    });  
   }
 
   addItem(imgUrl){
@@ -52,17 +64,10 @@ export default class Uploader extends React.Component {
     this.setState({
       form: {
         name: '',
-        description: ''
+        description: '',
+        imgFile: {}
       }
     });
-  }
-
-  onDrop(files) {
-    const file = files[0];
-
-    this.setState({
-      imgFile: file
-    });   
   }
 
   uploadImage(file, filename) {
@@ -74,53 +79,16 @@ export default class Uploader extends React.Component {
     });
   }
 
-  onChange(e) {
-    e.preventDefault();
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
-      }
-    });
-  }
-
   render() {
-    const { form: { name, description } } = this.state;
+    const { form } = this.state;
 
-    return <Form 
-      onSubmit={this.onSubmit}
-      className='dropzoneWrapper'
-    >
-      <Form.Input 
-        label='Name'
-        name='name' 
-        type="text" 
-        onChange={this.onChange}
-        value={name}
-      />
-      <Form.Input 
-        label='Description'
-        name='description' 
-        type="text" 
-        onChange={this.onChange}
-        value={description}
-      />
-        <Dropzone 
-          multiple={false}
-          onDrop={this.onDrop}
-          className='dropzone'
-        >
-        {this.state.imgFile.preview ? 
-          <img 
-            src={this.state.imgFile.preview} 
-            alt='preview'
-            className='previewImg'
-          /> :
-          <p>Drop an image here.</p>
-        }
-        </Dropzone>
-
-      <input type="submit"/>
-    </Form>
+    return <ItemForm
+      formData={ form }
+      showDropzone={ true }
+      handleChange={this.handleChange}
+      handleSubmit={this.handleSubmit}
+      setImgFile={this.setImgFile}
+      buttonText={'Upload'}
+    />
   }
 }

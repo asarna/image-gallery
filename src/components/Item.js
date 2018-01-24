@@ -3,6 +3,7 @@ import { Card, Image } from 'semantic-ui-react';
 import Delete from './Delete';
 import Edit from './Edit';
 import ItemForm from './ItemForm';
+import fire from './../fire.js';
 
 export default class Item extends React.Component {
 
@@ -20,6 +21,16 @@ export default class Item extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  updateItem() {
+    fire.database().ref(`${this.props.user.uid}/items`).child(this.props.id).update({
+      name: this.state.form.name,
+      description: this.state.form.description
+    }, () => {
+      this.setState({
+        editing: false
+      });
+    })
+  }
   handleEdit() {
     this.setState({
       editing: true,
@@ -29,6 +40,7 @@ export default class Item extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log('submit called');
+    this.updateItem();
   }
 
   handleChange(e) {

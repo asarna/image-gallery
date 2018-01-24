@@ -53,6 +53,15 @@ export default class Uploader extends React.Component {
     });  
   }
 
+  uploadImage(file, filename) {
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(`${this.props.user.uid}/${filename}.jpg`);
+
+    return imageRef.put(file).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
+  }
+
   addItem(imgUrl){
     const { form: { name, description } } = this.state;
 
@@ -61,21 +70,13 @@ export default class Uploader extends React.Component {
       description: description,
       imgUrl: imgUrl
     });
+    
     this.setState({
       form: {
         name: '',
         description: '',
         imgFile: {}
       }
-    });
-  }
-
-  uploadImage(file, filename) {
-    const storageRef = storage.ref();
-    const imageRef = storageRef.child(`${this.props.user.uid}/${filename}.jpg`);
-
-    return imageRef.put(file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
     });
   }
 

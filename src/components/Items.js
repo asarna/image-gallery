@@ -17,6 +17,13 @@ class Items extends Component {
     this.getItems(); 
   }
 
+  getItemIndex(id) {
+    const itemIndex = this.state.items.findIndex(item => {
+      return item.id === id;
+    });
+    return itemIndex;
+  }
+
   getItems() {
     /* Create reference to items in Firebase Database */
     let itemsRef = fire.database().ref(`${this.props.user.uid}/items`).orderByKey().limitToLast(100);
@@ -34,17 +41,28 @@ class Items extends Component {
     itemsRef.on('child_removed', snapshot => {
       // Update React state when item is removed at Firebase Database
       const itemId = snapshot.key;
-      const itemIndex = this.state.items.findIndex(item => {
-        return item.id === itemId;
-      });
-
+      const itemIndex = this.getItemIndex(itemId);
       const itemsArr = this.state.items;
       itemsArr.splice(itemIndex, 1);
 
       this.setState({
         items: itemsArr
       });
-    })
+    });
+
+    itemsRef.on('child_changed', snapshot => {
+      const itemId = snapshot.key;
+      const itemIndex = this.getItemIndex(itemId);
+      const snapshotVal = snapshot.val();
+      const itemsArr = this.state.items;
+      itemsArr[itemIndex] = {
+        ...itemsArr[itemIndex],
+        ...snapshotVal
+      };
+      this.setState({
+        items: itemsArr
+      });
+    });
   };
 
   render() {

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import { Menu, Label, Grid } from 'semantic-ui-react';
 import UserProvider from './components/UserProvider';
+import Sidebar from './components/Sidebar';
 
 class App extends Component {
   constructor(props) {
@@ -47,20 +48,7 @@ class App extends Component {
           />
           <Grid>
             <Grid.Column width={4}>
-              <Menu vertical>
-                <Menu.Item name='inbox' onClick={this.handleItemClick}>
-                  <Label color='teal'>1</Label>
-                  Inbox
-                </Menu.Item>
-                <Menu.Item name='spam' onClick={this.handleItemClick}>
-                  <Label>51</Label>
-                  Spam
-                </Menu.Item>
-                <Menu.Item name='updates' onClick={this.handleItemClick}>
-                  <Label>1</Label>
-                  Updates
-                </Menu.Item>
-              </Menu>
+              <Sidebar />
             </Grid.Column>
             <Grid.Column width={12}>
               <Router>

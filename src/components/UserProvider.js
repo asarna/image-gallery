@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 class UserProvider extends Component {
 
-  // you must specify what you’re adding to the context
   static childContextTypes = {
      user: PropTypes.object,
   }
@@ -14,7 +13,6 @@ class UserProvider extends Component {
   }
 
   render() {
-    // `Children.only` enables us not to add a <div /> for nothing
     return Children.only(this.props.children)
   }
 }

@@ -10,8 +10,7 @@ const user = (ComponentToWrap) => {
 
     render() {
       const { user } = this.context
-      // what we do is basically rendering `ComponentToWrap`
-      // with an added `theme` prop, like a hook
+
       return (
         <ComponentToWrap { ...this.props } user={ user } />
       )

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Button } from 'semantic-ui-react';
 import Delete from './Delete';
 import Edit from './Edit';
 import ItemForm from './ItemForm';
@@ -16,31 +16,15 @@ export default class Item extends React.Component {
         description: this.props.description
       }
     }
-    this.handleEdit = this.handleEdit.bind(this);
+    this.toggleEdit = this.toggleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  updateItem() {
-    fire.database().ref(`${this.props.user.uid}/items`).child(this.props.id).update({
-      name: this.state.form.name,
-      description: this.state.form.description
-    }, () => {
-      this.setState({
-        editing: false
-      });
-    })
-  }
-  handleEdit() {
+  toggleEdit() {
     this.setState({
-      editing: true,
+      editing: !this.state.editing,
     })
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    console.log('submit called');
-    this.updateItem();
   }
 
   handleChange(e) {
@@ -53,16 +37,36 @@ export default class Item extends React.Component {
     });
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.updateItem().then(() => {
+      this.toggleEdit();
+    });
+  }
+
+  updateItem() {
+    return fire.database().ref(`${this.props.user.uid}/items`).child(this.props.id).update({
+      ...this.state.form
+    });
+  }
+
   renderEditView() {
     const { form } = this.state;
 
-    return <ItemForm
-      formData={ form }
-      showDropzone={ false }
-      handleChange={this.handleChange}
-      handleSubmit={this.handleSubmit}
-      buttonText={'Save'}
-    />
+    return <div>
+      <ItemForm
+        formData={ form }
+        showDropzone={ false }
+        handleChange={this.handleChange}
+        handleSubmit={this.handleSubmit}
+        buttonText={'Save'}
+      >
+        <Button 
+          floated='right'
+          onClick={ this.toggleEdit }
+        >Cancel</Button>
+      </ItemForm>
+    </div>
   }
 
   renderReadView() {
@@ -77,13 +81,15 @@ export default class Item extends React.Component {
   }
 
   renderButtons() {
+    const { id } = this.props;
     return <Card.Content extra>
       <Delete 
-        itemToDelete={this.props.id}
+        itemToDelete={id}
       />
       <Edit 
-        itemToEdit={this.props.id}
-        onClick={this.handleEdit}
+
+        itemToEdit={id}
+        onClick={this.toggleEdit}
       />
     </Card.Content>
   }

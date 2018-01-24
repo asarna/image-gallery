@@ -53,6 +53,7 @@ export default class ItemForm extends React.Component {
         value={description}
       />
       <Button type="submit">{this.props.buttonText}</Button>
+      { this.props.children }
     </Form>
   }
 }

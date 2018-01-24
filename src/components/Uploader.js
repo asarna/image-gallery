@@ -57,9 +57,7 @@ export default class Uploader extends React.Component {
     const storageRef = storage.ref();
     const imageRef = storageRef.child(`${this.props.user.uid}/${filename}.jpg`);
 
-    return imageRef.put(file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
+    return imageRef.put(file);
   }
 
   addItem(imgUrl){
@@ -70,7 +68,7 @@ export default class Uploader extends React.Component {
       description: description,
       imgUrl: imgUrl
     });
-    
+
     this.setState({
       form: {
         name: '',

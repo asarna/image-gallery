@@ -45,7 +45,7 @@ export default class Item extends React.Component {
   }
 
   updateItem() {
-    return fire.database().ref(`${this.props.user.uid}/items`).child(this.props.id).update({
+    return fire.database().ref(`${this.props.user.profile.uid}/items`).child(this.props.id).update({
       ...this.state.form
     });
   }

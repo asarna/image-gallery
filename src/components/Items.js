@@ -25,8 +25,9 @@ class Items extends Component {
   }
 
   getItems() {
+    const { user } = this.props;
     /* Create reference to items in Firebase Database */
-    let itemsRef = fire.database().ref(`${this.props.user.uid}/items`).orderByKey().limitToLast(100);
+    let itemsRef = fire.database().ref(`${user.profile.uid}/items`).orderByKey().limitToLast(100);
     itemsRef.on('child_added', snapshot => {
       // Update React state when item is added at Firebase Database
       let item = { 

@@ -25,7 +25,8 @@ class Delete extends React.Component {
   }
 
   deleteItem() {
-    const itemRef = fire.database().ref(`${this.props.user.uid}/items/${this.props.itemToDelete}`);
+    const { user, itemToDelete } = this.props;
+    const itemRef = fire.database().ref(`${user.profile.uid}/items/${itemToDelete}`);
     return itemRef.remove();
   }
 

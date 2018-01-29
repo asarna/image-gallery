@@ -15,7 +15,7 @@ export default class Uploader extends React.Component {
       }
     }
 
-    this.itemsPath = `${this.props.user.uid}/items`;
+    this.itemsPath = `${this.props.user.profile.uid}/items`;
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -44,10 +44,11 @@ export default class Uploader extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const storageRef = storage.ref();
+    const userId = this.props.user.profile.uid;
     const newKey = fire.database().ref(this.itemsPath).push().key; // generate unique key
 
     this.uploadImage(this.state.form.imgFile, newKey).then(() => {   // upload image
-      storageRef.child(`${this.props.user.uid}/${newKey}.jpg`).getDownloadURL().then((url) => { // get image url
+      storageRef.child(`${userId}/${newKey}.jpg`).getDownloadURL().then((url) => { // get image url
         this.addItem(url);  // add to db
       });
     });  
@@ -55,7 +56,8 @@ export default class Uploader extends React.Component {
 
   uploadImage(file, filename) {
     const storageRef = storage.ref();
-    const imageRef = storageRef.child(`${this.props.user.uid}/${filename}.jpg`);
+    const userId = this.props.user.profile.uid;
+    const imageRef = storageRef.child(`${userId}/${filename}.jpg`);
 
     return imageRef.put(file);
   }

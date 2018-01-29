@@ -10,7 +10,7 @@ class ContentArea extends React.Component {
           return <AuthRoute 
               exact={ route.exact } 
               path={ route.path }
-              authenticated={!!this.props.user}
+              authenticated={this.props.user.isLoggedIn()}
               render={() => <route.component />}
               key={index}
           />

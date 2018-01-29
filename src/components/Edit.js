@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import user from './UserHOC';
 
 class Edit extends React.Component {
 
@@ -13,4 +12,4 @@ class Edit extends React.Component {
   }
 }
 
-export default user(Edit);
+export default Edit;

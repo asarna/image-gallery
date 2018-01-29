@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { auth } from './fire';
-import Items from './components/Items';
-import AuthRoute from './components/AuthRoute';
 import TopMenu from './components/TopMenu';
-import {
-  BrowserRouter as Router,
-} from 'react-router-dom';
-import { Menu, Label, Grid } from 'semantic-ui-react';
 import UserProvider from './components/UserProvider';
-import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 
 class App extends Component {
   constructor(props) {
@@ -46,23 +40,7 @@ class App extends Component {
             user={user}
             setUser={this.setUser}
           />
-          <Grid>
-            <Grid.Column width={4}>
-              <Sidebar />
-            </Grid.Column>
-            <Grid.Column width={12}>
-              <Router>
-                <div>
-                  <AuthRoute
-                    exact
-                    path="/secret"
-                    authenticated={!!user}
-                    render={() => <Items/>}
-                  />
-                </div>
-              </Router>
-            </Grid.Column>
-          </Grid>
+          <Layout/>
         </div>
       </UserProvider>
     );

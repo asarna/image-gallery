@@ -5,7 +5,7 @@ const user = (ComponentToWrap) => {
   return class UserComponent extends Component {
     // let’s define what’s needed from the `context`
     static contextTypes = {
-      user: PropTypes.object.isRequired,
+      user: PropTypes.object,
     }
 
     render() {

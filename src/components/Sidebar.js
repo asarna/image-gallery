@@ -1,18 +1,17 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export default class Sidebar extends React.Component {
   render() {
     return <Menu vertical>
-      <Menu.Item name='inbox' onClick={this.handleItemClick}>
-        Inbox
-      </Menu.Item>
-      <Menu.Item name='spam' onClick={this.handleItemClick}>
-        Spam
-      </Menu.Item>
-      <Menu.Item name='updates' onClick={this.handleItemClick}>
-        Updates
-      </Menu.Item>
+      { this.props.routes.map((route, index) => {
+        return <Menu.Item key={ index }>
+          <Link to={ route.path } key={ index }>
+            { route.menuLabel }
+          </Link>
+        </Menu.Item>
+      })}
     </Menu>
   }
 }

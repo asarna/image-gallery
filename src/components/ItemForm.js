@@ -18,13 +18,16 @@ export default class ItemForm extends React.Component {
   }
 
   render() {
-    const { formData: { name, description, imgFile } } = this.props;
+    const { 
+      formData: { name, description, imgFile }, 
+      showDropzone, handleSubmit, handleChange, buttonText, children
+    } = this.props;
 
     return <Form 
-      onSubmit={this.props.handleSubmit}
+      onSubmit={handleSubmit}
       className='dropzoneWrapper'
     >
-      {this.props.showDropzone && <Dropzone 
+      {showDropzone && <Dropzone 
           multiple={false}
           onDrop={this.onDrop}
           className='dropzone'
@@ -43,18 +46,18 @@ export default class ItemForm extends React.Component {
         label='Name'
         name='name' 
         type="text" 
-        onChange={this.props.handleChange}
+        onChange={handleChange}
         value={name}
       />
       <Form.Input 
         label='Description'
         name='description' 
         type="text" 
-        onChange={this.props.handleChange}
+        onChange={handleChange}
         value={description}
       />
-      <Button type="submit">{this.props.buttonText}</Button>
-      { this.props.children }
+      <Button type="submit">{buttonText}</Button>
+      { children }
     </Form>
   }
 }

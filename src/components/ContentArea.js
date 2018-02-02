@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
 import AuthRoute from './AuthRoute';
-import user from './UserHOC';
 
 class ContentArea extends React.Component {
   render() {
@@ -19,4 +18,4 @@ class ContentArea extends React.Component {
   }
 }
 
-export default user(ContentArea);
+export default ContentArea;

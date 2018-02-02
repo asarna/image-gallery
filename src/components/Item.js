@@ -45,7 +45,8 @@ export default class Item extends React.Component {
   }
 
   updateItem() {
-    return fire.database().ref(`${this.props.user.profile.uid}/items`).child(this.props.id).update({
+    const { user, id } = this.props;
+    return fire.database().ref(`${user.profile.uid}/items`).child(id).update({
       ...this.state.form
     });
   }
@@ -64,18 +65,20 @@ export default class Item extends React.Component {
         <Button 
           floated='right'
           onClick={ this.toggleEdit }
+          basic
         >Cancel</Button>
       </ItemForm>
     </div>
   }
 
   renderReadView() {
+    const { name, description } = this.props;
     return <Card.Content>
       <Card.Header>
-       {this.props.name}
+       {name}
       </Card.Header>
       <Card.Description>   
-        {this.props.description}
+        {description}
       </Card.Description>
     </Card.Content>
   }
@@ -87,7 +90,6 @@ export default class Item extends React.Component {
         itemToDelete={id}
       />
       <Edit 
-
         itemToEdit={id}
         onClick={this.toggleEdit}
       />
@@ -95,8 +97,9 @@ export default class Item extends React.Component {
   }
 
   render() {
-    return <Card key={this.props.id}>
-      <Image src={this.props.img} />
+    const { id, img } = this.props;
+    return <Card key={id}>
+      <Image src={img} />
         { this.state.editing ?
           this.renderEditView()
           : this.renderReadView()

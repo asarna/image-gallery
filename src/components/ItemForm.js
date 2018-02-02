@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
+import './ItemForm.css';
 
 export default class ItemForm extends React.Component {
 

@@ -7,7 +7,7 @@ class TopMenu extends React.Component {
   render() {
     const { user } = this.props;
 
-    return <Menu inverted>
+    return <Menu inverted className='fixed'>
       <Menu.Menu position='right'>
       {user.isLoggedIn() ?
         <Menu.Item onClick={user.logout}>Log Out</Menu.Item>                

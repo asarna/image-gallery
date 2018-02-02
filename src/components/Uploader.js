@@ -1,6 +1,5 @@
 import React from 'react';
 import fire, { storage } from './../fire.js';
-import './Uploader.css';
 import ItemForm from './ItemForm';
 
 export default class Uploader extends React.Component {

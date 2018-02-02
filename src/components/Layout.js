@@ -15,12 +15,15 @@ class Layout extends React.Component {
   renderLoggedInView() {
     return <div>
       <TopMenu/>
-      <Grid>
-        <Grid.Column width={4}>
+      <Grid columns={16} padded>
+        <Grid.Column width={3}>
           <Sidebar routes={ routes }/>
         </Grid.Column>
-        <Grid.Column width={12}>
-          <ContentArea routes={ routes }/>
+        <Grid.Column width={13}>
+          <ContentArea 
+            routes={ routes }
+            user={this.props.user}
+          />
         </Grid.Column>
       </Grid>
     </div>;

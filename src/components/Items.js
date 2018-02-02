@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import fire from './../fire.js';
-import { Card } from 'semantic-ui-react';
+import { Card, Dimmer, Loader, Header } from 'semantic-ui-react';
 import Item from './Item';
 import Uploader from './Uploader';
 import user from './UserHOC';
@@ -9,8 +9,10 @@ class Items extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      items: [],
+      loading: false
     }
+    this.setLoading = this.setLoading.bind(this);
   }
 
   componentWillMount() {
@@ -24,7 +26,14 @@ class Items extends Component {
     return itemIndex;
   }
 
+  setLoading(bool) {
+    this.setState({
+      loading: bool
+    });
+  }
+
   getItems() {
+    this.setLoading(true);
     const { user } = this.props;
     /* Create reference to items in Firebase Database */
     let itemsRef = fire.database().ref(`${user.profile.uid}/items`).orderByKey().limitToLast(100);
@@ -36,8 +45,11 @@ class Items extends Component {
         imgUrl: snapshot.val().imgUrl, 
         id: snapshot.key 
       };
-      this.setState({ items: [item].concat(this.state.items) });
-    })
+      this.setState({ 
+        items: [item].concat(this.state.items),
+      });
+      this.setLoading(false);
+    });
 
     itemsRef.on('child_removed', snapshot => {
       // Update React state when item is removed at Firebase Database
@@ -69,7 +81,13 @@ class Items extends Component {
   render() {
     return (
       <div>
-        <h1>My stuff</h1>
+        <Dimmer 
+          active={this.state.loading}
+          inverted
+        >
+          <Loader />
+        </Dimmer>
+        <Header as='h1'>My stuff</Header>
         <Card.Group itemsPerRow={4}>
             {
               this.state.items.map( item => {
@@ -87,6 +105,7 @@ class Items extends Component {
             }
             <Card className='uploaderCard'>
               <Uploader 
+                setLoading={this.setLoading}
                 user={this.props.user}
               />
             </Card>

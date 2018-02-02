@@ -41,6 +41,7 @@ export default class Uploader extends React.Component {
   }
 
   handleSubmit(e) {
+    this.props.setLoading(true);
     e.preventDefault();
     const storageRef = storage.ref();
     const userId = this.props.user.profile.uid;

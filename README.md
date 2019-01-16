@@ -1,3 +1,17 @@
+# Running locally
+
+`git clone https://github.com/asarna/image-gallery.git`
+
+`cd image-gallery`
+
+`npm install`
+
+`npm start`
+
+Navigate to `localhost:3001`
+
+# Create React App
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

@@ -6,9 +6,9 @@ import TopMenu from './TopMenu';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom';
-import { routes } from '../routes';
-import user from './UserHOC';
-import Splash from './Splash';
+import { routes } from '../../routes';
+import user from '../User/UserHOC';
+import Splash from '../Splash';
 
 class Layout extends React.Component {
 

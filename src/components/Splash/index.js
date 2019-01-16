@@ -1,5 +1,5 @@
 import React from 'react';
-import user from './UserHOC';
+import user from '../User/UserHOC';
 import { Button, Grid, Segment, Header } from 'semantic-ui-react';
 import './Splash.css';
 

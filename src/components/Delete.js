@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Modal, Button, Header } from 'semantic-ui-react';
-import fire from './../fire.js';
-import user from './UserHOC';
+import fire from './../config/fire.js';
+import user from './User/UserHOC';
 
 class Delete extends React.Component {
 

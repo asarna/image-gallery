@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import fire from './../fire.js';
+import fire from './../config/fire.js';
 import { Card, Dimmer, Loader, Header } from 'semantic-ui-react';
 import Item from './Item';
 import Uploader from './Uploader';
-import user from './UserHOC';
+import user from './User/UserHOC';
 
 class Items extends Component {
   constructor(props) {

@@ -3,7 +3,7 @@ import { Card, Image, Button } from 'semantic-ui-react';
 import Delete from './Delete';
 import Edit from './Edit';
 import ItemForm from './ItemForm';
-import fire from './../fire.js';
+import fire from './../config/fire.js';
 
 export default class Item extends React.Component {
 

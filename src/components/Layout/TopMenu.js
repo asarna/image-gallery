@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
-import user from './UserHOC';
+import user from '../User/UserHOC';
 
 class TopMenu extends React.Component {
 

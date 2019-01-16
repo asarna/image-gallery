@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserProvider from './components/UserProvider';
+import UserProvider from './components/User/UserProvider';
 import Layout from './components/Layout';
 
 class App extends Component {

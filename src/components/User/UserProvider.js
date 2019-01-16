@@ -1,6 +1,6 @@
 import { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import { auth, provider } from '../fire';
+import { auth, provider } from '../../config/fire';
 
 
 class UserProvider extends Component {

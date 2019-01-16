@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import AuthRoute from './AuthRoute';
+import AuthRoute from '../AuthRoute';
 
 class ContentArea extends React.Component {
   render() {
